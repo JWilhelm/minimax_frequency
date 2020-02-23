@@ -19,7 +19,7 @@ def main():
 
     print("range", minimax_range)
 
-    min_alpha, max_alpha, min_beta, max_beta = [], [], [], []
+    min_alpha, max_alpha, min_beta, max_beta, alphas_fac, betas_fac = [], [], [], [], [], []
     for i_minimax in minimax_range:
        alphas_betas = np.loadtxt("alpha_beta_of_N_"+str(i_minimax))
        min_alpha.append(alphas_betas[0])
@@ -27,6 +27,8 @@ def main():
        min_beta.append(alphas_betas[i_minimax])
        max_beta.append(alphas_betas[2*i_minimax-1])
 
+       alphas_fac.append(np.array(alphas_betas[1:i_minimax])/np.array(alphas_betas[0:i_minimax-1]))
+       betas_fac.append(np.array(alphas_betas[i_minimax+1:])/np.array(alphas_betas[i_minimax:2*i_minimax-1]))
        print("")
        print("================")
        print("i_minimax", i_minimax)
@@ -35,6 +37,8 @@ def main():
        print("alphas_fac", np.array(alphas_betas[1:i_minimax])/np.array(alphas_betas[0:i_minimax-1]))
        print("")
        print("betas_fac", np.array(alphas_betas[i_minimax+1:])/np.array(alphas_betas[i_minimax:2*i_minimax-1]))
+       print("")
+
 
 
     min_alpha_factor = np.array(min_alpha[1:])/np.array(min_alpha[0:n_previous-1])
@@ -67,8 +71,18 @@ def main():
     print("")
     print("")
 
+    upper_betas_fac_extrapol = np.array(alphas_betas[i_minimax+5:])/np.array(alphas_betas[i_minimax+4:2*i_minimax-1])
+    n_lower = 2
+    lower_betas_fac_extrapol = 2*betas_fac[n_previous-1][0:n_lower+1] - betas_fac[n_previous-2][0:n_lower+1]
+    n_rest = n_minimax - np.size(upper_betas_fac_extrapol) - np.size(lower_betas_fac_extrapol) - 1
+    print("n_rest", n_rest)
+    middle_betas_fac_extrapol = np.linspace(lower_betas_fac_extrapol[n_lower], upper_betas_fac_extrapol[0], n_rest+2)
 
+    betas_fac_extrapol = np.append(lower_betas_fac_extrapol, np.append(middle_betas_fac_extrapol[1:n_rest+1], upper_betas_fac_extrapol))
 
+    print("betas_fac_extrapol", betas_fac_extrapol)
+
+#    lower_betas_fac_extrapol = 
 
 if __name__ == "__main__":
     main()
