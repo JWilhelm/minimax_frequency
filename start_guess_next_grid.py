@@ -8,10 +8,7 @@ from numpy import dot, outer
 def main():
     
     # Set parameters
-    n_minimax = 22                     # Number of minimax points
-    R_minimax = 10**10                 # Range of the minimax approximation
-    n_x       = 1000                   # total number of points on the x-axis for optimization
-    eps_diff  = 10**(-10)
+    n_minimax = 34                     # Number of minimax points
 
     n_previous = (n_minimax-10)//2
 
@@ -94,8 +91,6 @@ def main():
 
     multiplication_factor = missing_factor**(2/(n_minimax/2*(n_minimax/2+1)))
 
-##########
-
     factor = []
     for n in range(n_minimax//2):
       factor.append(multiplication_factor**(n_minimax//2-n))
@@ -111,8 +106,6 @@ def main():
     alphas_betas_extrapol.append(min_alpha_extra_factor*min_alpha[n_previous-1])
     for i_alpha in range(1,n_minimax):
       alphas_betas_extrapol.append(alphas_betas_extrapol[i_alpha-1]*alphas_fac_extrapol[i_alpha-1])
-
-##############
 
     print("")
     print("")
@@ -160,6 +153,8 @@ def main():
     print("alphas_betas_extrapol =", alphas_betas_extrapol)
     print("")
     print("")
+
+    np.savetxt("alpha_beta_of_N_"+str(n_minimax), alphas_betas_extrapol )
 
 if __name__ == "__main__":
     main()
