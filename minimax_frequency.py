@@ -9,14 +9,17 @@ def main():
     
     # Set parameters
     n_minimax = 10                     # Number of minimax points
-    R_minimax = 10**14                 # Range of the minimax approximation
-    n_x       = 8000                   # total number of points on the x-axis for optimization
+    R_minimax = 10**10                 # Range of the minimax approximation
+    n_x       = 1000                   # total number of points on the x-axis for optimization
     eps_diff  = 10**(-10)
 
     xdata = 10**(np.logspace(0,np.log(np.log10(R_minimax)),n_x))/10
     ydata = np.zeros(n_x)
 
     alphas_betas_init = np.loadtxt("alpha_beta_of_N_"+str(n_minimax))
+
+    print("alphas_betas_init",alphas_betas_init[0:n_minimax])
+    print("xdata", xdata)
 
     denominator_matrix = build_denominator_matrix(xdata, alphas_betas_init[0:n_minimax])
 
@@ -63,7 +66,9 @@ def build_denominator_matrix(xdata,alphas):
     return matrix
 
 def eta(x, *params):
-    return 1/x - (outer(x,params[0:np.size(params)//2])).dot(params[np.size(params)//2:])
+    denominator_matrix = build_denominator_matrix(x, params[0:np.size(params)//2])
+    print("func", 1/x - denominator_matrix.dot(params[np.size(params)//2:]) )
+    return 1/x - denominator_matrix.dot(params[np.size(params)//2:])
 
 def eta_plotting(x, *params):
     params_1d = np.transpose(params)[:,0]
