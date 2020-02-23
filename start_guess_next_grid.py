@@ -90,13 +90,40 @@ def main():
 
     alphas_fac_extrapol = np.append(lower_alphas_fac_extrapol, np.append(middle_alphas_fac_extrapol[1:n_rest+1], upper_alphas_fac_extrapol))
 
+    missing_factor = np.prod(alphas_fac[n_previous-1])/np.prod(alphas_fac_extrapol)*max_alpha_extra_factor/min_alpha_extra_factor
+
+    multiplication_factor = missing_factor**(2/(n_minimax/2*(n_minimax/2+1)))
+
+##########
+
+    factor = []
+    for n in range(n_minimax//2):
+      factor.append(multiplication_factor**(n_minimax//2-n))
+
+    factor = np.append(np.array(factor), np.ones(n_minimax//2-1))
+
+    alphas_fac_extrapol = alphas_fac_extrapol * factor
+
+    missing_factor_new = np.prod(alphas_fac[n_previous-1])/np.prod(alphas_fac_extrapol)*max_alpha_extra_factor/min_alpha_extra_factor
+
+    alphas_betas_extrapol = []
+
+    alphas_betas_extrapol.append(min_alpha_extra_factor*min_alpha[n_previous-1])
+    for i_alpha in range(1,n_minimax):
+      alphas_betas_extrapol.append(alphas_betas_extrapol[i_alpha-1]*alphas_fac_extrapol[i_alpha-1])
+
+##############
+
+    print("")
+    print("")
+    print("missing_factor =", missing_factor)
+    print("")
+
     print("")
     print("")
     print("alpha_fac_extrapol =", alphas_fac_extrapol)
     print("")
     print("")
-
-    alphas_betas_extrapol = []
 
 #####################################################
 # 2. Extrapolate the weights beta                   #
@@ -124,13 +151,13 @@ def main():
 
     missing_factor_new = np.prod(betas_fac[n_previous-1])/np.prod(betas_fac_extrapol)*max_beta_extra_factor/min_beta_extra_factor
 
-    alphas_betas_extrapol.append(min_alpha_extra_factor*min_beta[n_previous-1])
+    alphas_betas_extrapol.append(min_beta_extra_factor*min_beta[n_previous-1])
     for i_beta in range(1,n_minimax):
       alphas_betas_extrapol.append(alphas_betas_extrapol[i_beta-1]*betas_fac_extrapol[i_beta-1])
 
     print("")
     print("")
-    print("betas =", alphas_betas_extrapol)
+    print("alphas_betas_extrapol =", alphas_betas_extrapol)
     print("")
     print("")
 
