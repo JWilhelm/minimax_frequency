@@ -76,6 +76,20 @@ def main():
     print("")
     print("")
 
+
+
+#####################################################
+# 1. Extrapolate the nodes alpha                    #
+#####################################################
+
+
+    alphas_betas_extrapol = []
+
+
+#####################################################
+# 2. Extrapolate the weights beta                   #
+#####################################################
+
     upper_betas_fac_extrapol = np.array(alphas_betas[i_minimax+5:])/np.array(alphas_betas[i_minimax+4:2*i_minimax-1])
     n_lower = 2
     lower_betas_fac_extrapol = 2*betas_fac[n_previous-1][0:n_lower+1] - betas_fac[n_previous-2][0:n_lower+1]
@@ -97,27 +111,15 @@ def main():
 
     betas_fac_extrapol = betas_fac_extrapol * factor
 
-    print("factor",factor)
-    print("np.size(factor)",np.size(factor))
-    print("np.prod(factor)",np.prod(factor))
-
     missing_factor_new = np.prod(betas_fac[n_previous-1])/np.prod(betas_fac_extrapol)*max_beta_extra_factor/min_beta_extra_factor
 
-    print("betas_fac_extrapol", betas_fac_extrapol)
-    print("missing_factor_new", missing_factor_new)
-    print("np.prod(betas_fac_extrapol)", np.prod(betas_fac_extrapol))
-
-    alphas_betas = []
-    alphas_betas.append(min_alpha_extra_factor*min_beta[n_previous-1])
+    alphas_betas_extrapol.append(min_alpha_extra_factor*min_beta[n_previous-1])
     for i_beta in range(1,n_minimax):
-#      print("i_beta", i_beta)
-#      print("alphas_betas[i_beta-1]", alphas_betas[i_beta-1])
-#      print("betas_fac_extrapol[i_beta-1]", betas_fac_extrapol[i_beta-1])
-      alphas_betas.append(alphas_betas[i_beta-1]*betas_fac_extrapol[i_beta-1])
+      alphas_betas_extrapol.append(alphas_betas_extrapol[i_beta-1]*betas_fac_extrapol[i_beta-1])
 
     print("")
     print("")
-    print("betas =", alphas_betas)
+    print("betas =", alphas_betas_extrapol)
     print("")
     print("")
 
