@@ -26,29 +26,36 @@ def main():
     print("np.shape(denominator_matrix)", np.shape(denominator_matrix))
 
     alphas_betas_L2_opt, alphas_betas_conv = curve_fit(eta, xdata, ydata, p0=alphas_betas_init)
-    alphas_betas_E = np.append(alphas_betas_L2_opt,1e-10)
-#    alphas_betas_E = np.append(alphas_betas_init,1)
 
-#    E_old = alphas_betas_E[-1]*2
-#
-#    sort_indices = np.argsort(alphas_betas_E[0:n_minimax])
-#    np.savetxt("alpha_beta_of_N_"+str(n_minimax)+"_L2", np.append(alphas_betas_E[sort_indices],alphas_betas_E[sort_indices+n_minimax]) )
-#    i = 0
-#    while (alphas_betas_E[-1]/E_old < 1-eps_diff or alphas_betas_E[-1] > E_old):
-#
-#        E_old = alphas_betas_E[-1]
-#        extrema_x = np.append(xdata[0], xdata[argrelextrema(eta_plotting(xdata,alphas_betas_E[0:np.size(alphas_betas_E)-1]), np.greater)[0]])
-#        extrema_x = np.append(extrema_x, xdata[argrelextrema(eta_plotting(xdata,alphas_betas_E[0:np.size(alphas_betas_E)-1]), np.less)[0]])
-#        print("number of extrema =", np.size(extrema_x))
-#        alphas_betas_E[np.size(alphas_betas_E)-1] = np.average(np.abs(eta_plotting(extrema_x,alphas_betas_E[0:np.size(alphas_betas_E)-1])))
-#        i += 1
-#        print("iteration =", i, "E =",  alphas_betas_E[-1])
-#        print("iteration =", i, "alphas_betas_E =",  alphas_betas_E)
-#
-#        alphas_betas_E = fsolve(eta_for_alphas_betas_E_update, x0=alphas_betas_E, args=extrema_x)
-#
-#    sort_indices = np.argsort(alphas_betas_E[0:n_minimax])
-#    np.savetxt("alpha_beta_of_N_"+str(n_minimax), np.append(alphas_betas_E[sort_indices],alphas_betas_E[sort_indices+n_minimax]) )
+    fig1, (axis1) = pl.subplots(1,1)
+    axis1.set_xlim((0.8,R_minimax))
+    axis1.semilogx(xdata,eta_plotting(xdata,alphas_betas_L2_opt))
+
+    pl.show()
+
+    alphas_betas_E = np.append(alphas_betas_L2_opt,1)
+
+    E_old = alphas_betas_E[-1]*2
+
+    sort_indices = np.argsort(alphas_betas_E[0:n_minimax])
+    np.savetxt("alpha_beta_of_N_"+str(n_minimax)+"_L2", np.append(alphas_betas_E[sort_indices],alphas_betas_E[sort_indices+n_minimax]) )
+    i = 0
+    while (alphas_betas_E[-1]/E_old < 1-eps_diff or alphas_betas_E[-1] > E_old):
+
+        E_old = alphas_betas_E[-1]
+        extrema_x = np.append(xdata[0], xdata[argrelextrema(eta_plotting(xdata,alphas_betas_E[0:np.size(alphas_betas_E)-1]), np.greater)[0]])
+        extrema_x = np.append(extrema_x, xdata[argrelextrema(eta_plotting(xdata,alphas_betas_E[0:np.size(alphas_betas_E)-1]), np.less)[0]])
+        print("extrema x", extrema_x)
+        print("number of extrema =", np.size(extrema_x))
+        alphas_betas_E[np.size(alphas_betas_E)-1] = np.average(np.abs(eta_plotting(extrema_x,alphas_betas_E[0:np.size(alphas_betas_E)-1])))
+        i += 1
+        print("iteration =", i, "E =",  alphas_betas_E[-1])
+        print("iteration =", i, "alphas_betas_E =",  alphas_betas_E)
+
+        alphas_betas_E = fsolve(eta_for_alphas_betas_E_update, x0=alphas_betas_E, args=extrema_x)
+
+    sort_indices = np.argsort(alphas_betas_E[0:n_minimax])
+    np.savetxt("alpha_beta_of_N_"+str(n_minimax), np.append(alphas_betas_E[sort_indices],alphas_betas_E[sort_indices+n_minimax]) )
 
     fig1, (axis1) = pl.subplots(1,1)
     axis1.set_xlim((0.8,R_minimax))
@@ -82,7 +89,11 @@ def eta_for_alphas_betas_E_update(x, *params):
     E = np.empty(size_x)
     E[0:size_x//2+1] = x[size_params-1]
     E[size_x//2+1:] = -x[size_params-1]
-    return 1/params_1d - (np.exp(-outer(params_1d,x[0:np.size(x)//2]))).dot(x[np.size(x)//2:np.size(x)-1]) - E
+    denominator_matrix = build_denominator_matrix(params_1d,np.array(x[0:np.size(x)//2]))
+    print("shape denom matrix",np.shape(denominator_matrix))
+    return 1/params_1d - np.array(denominator_matrix).dot(x[np.size(x)//2:(np.size(x)//2)*2])
+
+#    return 1/params_1d - (np.exp(-outer(params_1d,x[0:np.size(x)//2]))).dot(x[np.size(x)//2:np.size(x)-1]) - E
 
 if __name__ == "__main__":
     main()
