@@ -8,8 +8,8 @@ from numpy import dot, outer
 def main():
     
     # Set parameters
-    n_minimax = 34                     # Number of minimax points
-    R_minimax = 10**11                 # Range of the minimax approximation
+    n_minimax = 38                     # Number of minimax points
+    R_minimax = 10**13                 # Range of the minimax approximation
     n_x       = 4000                   # total number of points on the x-axis for optimization
     eps_diff  = 10**(-10)
 

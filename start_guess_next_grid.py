@@ -8,7 +8,7 @@ from numpy import dot, outer
 def main():
     
     # Set parameters
-    n_minimax = 34                     # Number of minimax points
+    n_minimax = 38                     # Number of minimax points
 
     n_previous = (n_minimax-10)//2
 
