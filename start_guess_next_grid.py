@@ -38,10 +38,10 @@ def main():
        print("")
        print("alpha_max/alpha_min", alphas_betas[i_minimax-1]/alphas_betas[0])
        print("")
-       print("betas_fac", np.array(alphas_betas[i_minimax+1:])/np.array(alphas_betas[i_minimax:2*i_minimax-1]))
-       print("")
-       print("beta_max/beta_min", alphas_betas[2*i_minimax-1]/alphas_betas[i_minimax])
-       print("")
+#       print("betas_fac", np.array(alphas_betas[i_minimax+1:])/np.array(alphas_betas[i_minimax:2*i_minimax-1]))
+#       print("")
+#       print("beta_max/beta_min", alphas_betas[2*i_minimax-1]/alphas_betas[i_minimax])
+#       print("")
 
 
 
@@ -55,13 +55,13 @@ def main():
     print("")
     print("min_alpha", min_alpha)
     print("max_alpha", max_alpha)
-    print("min_beta", min_beta)
-    print("max_beta", max_beta)
+#    print("min_beta", min_beta)
+#    print("max_beta", max_beta)
     print("")
     print("min_alpha_factor", min_alpha_factor)
     print("max_alpha_factor", max_alpha_factor)
-    print("min_beta_factor", min_beta_factor)
-    print("max_beta_factor", max_beta_factor)
+#    print("min_beta_factor", min_beta_factor)
+#    print("max_beta_factor", max_beta_factor)
 
     min_alpha_extra_factor = 2*min_alpha_factor[n_previous-2] - min_alpha_factor[n_previous-3]
     max_alpha_extra_factor = 2*max_alpha_factor[n_previous-2] - max_alpha_factor[n_previous-3]
@@ -71,8 +71,8 @@ def main():
     print("")
     print("min_alpha_extra_factor", min_alpha_extra_factor)
     print("max_alpha_extra_factor", max_alpha_extra_factor)
-    print("min_beta_extra_factor", min_beta_extra_factor)
-    print("max_beta_extra_factor", max_beta_extra_factor)
+#    print("min_beta_extra_factor", min_beta_extra_factor)
+#    print("max_beta_extra_factor", max_beta_extra_factor)
     print("")
     print("")
 
@@ -82,9 +82,21 @@ def main():
 # 1. Extrapolate the nodes alpha                    #
 #####################################################
 
+    upper_alphas_fac_extrapol = np.array(alphas_betas[5:i_minimax])/np.array(alphas_betas[4:i_minimax-1])
+    n_lower = 5
+    lower_alphas_fac_extrapol = 2*alphas_fac[n_previous-1][0:n_lower+1] - alphas_fac[n_previous-2][0:n_lower+1]
+    n_rest = n_minimax - np.size(upper_alphas_fac_extrapol) - np.size(lower_alphas_fac_extrapol) - 1
+    middle_alphas_fac_extrapol = np.linspace(lower_alphas_fac_extrapol[n_lower], upper_alphas_fac_extrapol[0], n_rest+2)
+
+    alphas_fac_extrapol = np.append(lower_alphas_fac_extrapol, np.append(middle_alphas_fac_extrapol[1:n_rest+1], upper_alphas_fac_extrapol))
+
+    print("")
+    print("")
+    print("alpha_fac_extrapol =", alphas_fac_extrapol)
+    print("")
+    print("")
 
     alphas_betas_extrapol = []
-
 
 #####################################################
 # 2. Extrapolate the weights beta                   #
@@ -94,7 +106,6 @@ def main():
     n_lower = 2
     lower_betas_fac_extrapol = 2*betas_fac[n_previous-1][0:n_lower+1] - betas_fac[n_previous-2][0:n_lower+1]
     n_rest = n_minimax - np.size(upper_betas_fac_extrapol) - np.size(lower_betas_fac_extrapol) - 1
-    print("n_rest", n_rest)
     middle_betas_fac_extrapol = np.linspace(lower_betas_fac_extrapol[n_lower], upper_betas_fac_extrapol[0], n_rest+2)
 
     betas_fac_extrapol = np.append(lower_betas_fac_extrapol, np.append(middle_betas_fac_extrapol[1:n_rest+1], upper_betas_fac_extrapol))
