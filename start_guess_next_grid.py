@@ -107,7 +107,19 @@ def main():
     print("missing_factor_new", missing_factor_new)
     print("np.prod(betas_fac_extrapol)", np.prod(betas_fac_extrapol))
 
+    alphas_betas = []
+    alphas_betas.append(min_alpha_extra_factor*min_beta[n_previous-1])
+    for i_beta in range(1,n_minimax):
+#      print("i_beta", i_beta)
+#      print("alphas_betas[i_beta-1]", alphas_betas[i_beta-1])
+#      print("betas_fac_extrapol[i_beta-1]", betas_fac_extrapol[i_beta-1])
+      alphas_betas.append(alphas_betas[i_beta-1]*betas_fac_extrapol[i_beta-1])
 
+    print("")
+    print("")
+    print("betas =", alphas_betas)
+    print("")
+    print("")
 
 if __name__ == "__main__":
     main()
