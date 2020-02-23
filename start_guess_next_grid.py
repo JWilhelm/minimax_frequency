@@ -36,8 +36,13 @@ def main():
        print("")
        print("alphas_fac", np.array(alphas_betas[1:i_minimax])/np.array(alphas_betas[0:i_minimax-1]))
        print("")
+       print("alpha_max/alpha_min", alphas_betas[i_minimax-1]/alphas_betas[0])
+       print("")
        print("betas_fac", np.array(alphas_betas[i_minimax+1:])/np.array(alphas_betas[i_minimax:2*i_minimax-1]))
        print("")
+       print("beta_max/beta_min", alphas_betas[2*i_minimax-1]/alphas_betas[i_minimax])
+       print("")
+
 
 
 
@@ -81,6 +86,8 @@ def main():
     betas_fac_extrapol = np.append(lower_betas_fac_extrapol, np.append(middle_betas_fac_extrapol[1:n_rest+1], upper_betas_fac_extrapol))
 
     print("betas_fac_extrapol", betas_fac_extrapol)
+    print("")
+    print("np.prod(betas_fac_extrapol)", np.prod(betas_fac_extrapol))
 
 #    lower_betas_fac_extrapol = 
 
