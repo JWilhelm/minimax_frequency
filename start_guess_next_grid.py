@@ -85,11 +85,29 @@ def main():
 
     betas_fac_extrapol = np.append(lower_betas_fac_extrapol, np.append(middle_betas_fac_extrapol[1:n_rest+1], upper_betas_fac_extrapol))
 
+    missing_factor = np.prod(betas_fac[n_previous-1])/np.prod(betas_fac_extrapol)*max_beta_extra_factor/min_beta_extra_factor
+
+    multiplication_factor = missing_factor**(2/(n_minimax/2*(n_minimax/2+1)))
+
+    factor = []
+    for n in range(n_minimax//2):
+      factor.append(multiplication_factor**(n_minimax//2-n))
+
+    factor = np.append(np.array(factor), np.ones(n_minimax//2-1))
+
+    betas_fac_extrapol = betas_fac_extrapol * factor
+
+    print("factor",factor)
+    print("np.size(factor)",np.size(factor))
+    print("np.prod(factor)",np.prod(factor))
+
+    missing_factor_new = np.prod(betas_fac[n_previous-1])/np.prod(betas_fac_extrapol)*max_beta_extra_factor/min_beta_extra_factor
+
     print("betas_fac_extrapol", betas_fac_extrapol)
-    print("")
+    print("missing_factor_new", missing_factor_new)
     print("np.prod(betas_fac_extrapol)", np.prod(betas_fac_extrapol))
 
-#    lower_betas_fac_extrapol = 
+
 
 if __name__ == "__main__":
     main()
