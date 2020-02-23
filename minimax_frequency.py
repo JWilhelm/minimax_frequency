@@ -8,7 +8,7 @@ from numpy import dot, outer
 def main():
     
     # Set parameters
-    n_minimax = 10                     # Number of minimax points
+    n_minimax = 20                     # Number of minimax points
     R_minimax = 10**10                 # Range of the minimax approximation
     n_x       = 1000                   # total number of points on the x-axis for optimization
     eps_diff  = 10**(-10)
@@ -20,8 +20,6 @@ def main():
 
 #    print("xdata", xdata)
 
-    denominator_matrix = build_denominator_matrix(xdata, alphas_betas_init[0:n_minimax])
-
     alphas_betas_L2_opt, alphas_betas_conv = curve_fit(eta, xdata, ydata, p0=alphas_betas_init)
 
     alphas_betas_E = np.append(alphas_betas_L2_opt,1)
@@ -29,7 +27,7 @@ def main():
     E_old = alphas_betas_E[-1]*2
 
     sort_indices = np.argsort(alphas_betas_E[0:n_minimax])
-    np.savetxt("alpha_beta_of_N_"+str(n_minimax)+"_L2", np.append(alphas_betas_E[sort_indices],alphas_betas_E[sort_indices+n_minimax]) )
+#    np.savetxt("alpha_beta_of_N_"+str(n_minimax)+"_L2", np.append(alphas_betas_E[sort_indices],alphas_betas_E[sort_indices+n_minimax]) )
     i = 0
     while (alphas_betas_E[-1]/E_old < 1-eps_diff or alphas_betas_E[-1] > E_old):
 
@@ -57,10 +55,11 @@ def main():
 def build_denominator_matrix(xdata,alphas):
     matrix = []
     for x in xdata:
-      matrix.append((2*x/(x**2+alphas**2))**2/np.pi)
+      matrix.append((2*x/(x**2+np.array(alphas)**2))**2/np.pi)
     return matrix
 
 def eta(x, *params):
+#    print("params", params)
     denominator_matrix = build_denominator_matrix(x, np.array(params[0:np.size(params)//2]))
     return 1/x - np.array(denominator_matrix).dot(params[np.size(params)//2:])
 
