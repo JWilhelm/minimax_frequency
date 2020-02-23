@@ -26,7 +26,7 @@ def main():
     print("np.shape(denominator_matrix)", np.shape(denominator_matrix))
 
     alphas_betas_L2_opt, alphas_betas_conv = curve_fit(eta, xdata, ydata, p0=alphas_betas_init)
-    alphas_betas_E = np.append(alphas_betas_L2_opt,1)
+    alphas_betas_E = np.append(alphas_betas_L2_opt,1e-10)
 #    alphas_betas_E = np.append(alphas_betas_init,1)
 
 #    E_old = alphas_betas_E[-1]*2
@@ -71,7 +71,9 @@ def eta(x, *params):
 
 def eta_plotting(x, *params):
     params_1d = np.transpose(params)[:,0]
-    return 1/x - (np.exp(-outer(x,params_1d[0:np.size(params)//2]))).dot(params_1d[np.size(params)//2:(np.size(params)//2)*2])
+    denominator_matrix = build_denominator_matrix(x, np.array(params_1d[0:np.size(params)//2]))
+    return 1/x - np.array(denominator_matrix).dot(params_1d[np.size(params)//2:(np.size(params)//2)*2])
+#    return 1/x - (np.exp(-outer(x,params_1d[0:np.size(params)//2]))).dot(params_1d[np.size(params)//2:(np.size(params)//2)*2])
 
 def eta_for_alphas_betas_E_update(x, *params):
     params_1d = np.transpose(params)[:,0]
