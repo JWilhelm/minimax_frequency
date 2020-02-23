@@ -38,6 +38,10 @@ def main():
 
 
     min_alpha_factor = np.array(min_alpha[1:])/np.array(min_alpha[0:n_previous-1])
+    max_alpha_factor = np.array(max_alpha[1:])/np.array(max_alpha[0:n_previous-1])
+    min_beta_factor = np.array(min_beta[1:])/np.array(min_beta[0:n_previous-1])
+    max_beta_factor = np.array(max_beta[1:])/np.array(max_beta[0:n_previous-1])
+
 
     print("")
     print("min_alpha", min_alpha)
@@ -46,14 +50,20 @@ def main():
     print("max_beta", max_beta)
     print("")
     print("min_alpha_factor", min_alpha_factor)
-    print("max_alpha_factor", np.array(max_alpha[1:])/np.array(max_alpha[0:n_previous-1]))
-    print("min_beta_factor", np.array(min_beta[1:])/np.array(min_beta[0:n_previous-1]))
-    print("max_beta_factor", np.array(max_beta[1:])/np.array(max_beta[0:n_previous-1]))
+    print("max_alpha_factor", max_alpha_factor)
+    print("min_beta_factor", min_beta_factor)
+    print("max_beta_factor", max_beta_factor)
 
     min_alpha_extra_factor = 2*min_alpha_factor[n_previous-2] - min_alpha_factor[n_previous-3]
+    max_alpha_extra_factor = 2*max_alpha_factor[n_previous-2] - max_alpha_factor[n_previous-3]
+    min_beta_extra_factor  = 2*min_beta_factor[n_previous-2] - min_beta_factor[n_previous-3]
+    max_beta_extra_factor   = 2*max_beta_factor[n_previous-2] - max_beta_factor[n_previous-3]
 
     print("")
     print("min_alpha_extra_factor", min_alpha_extra_factor)
+    print("max_alpha_extra_factor", max_alpha_extra_factor)
+    print("min_beta_extra_factor", min_beta_extra_factor)
+    print("max_beta_extra_factor", max_beta_extra_factor)
     print("")
     print("")
 
