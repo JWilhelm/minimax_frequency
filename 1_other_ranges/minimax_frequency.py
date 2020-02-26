@@ -31,7 +31,7 @@ def main():
 
     if desired_ranges_exist:
         with open(desired_ranges_file) as f:
-           lines = [line.rstrip() for line in f]
+            lines = [int(x) for x in f]
 
     print("lines=", lines)
 
