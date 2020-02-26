@@ -112,7 +112,14 @@ def find_closest_R(n_minimax, R_minimax, path):
 
     files = [f for f in listdir(path) if isfile(join(path, f))]
 
-    print("files=", files)
+    dist_R = 1E10
+
+    for f in files:
+        print("R unformatted", f[21:34], "E unformatted", f[37:], "file", f)
+        if(not f.startswith("alpha")): continue
+        R_file = int(f[21:34])
+        E_file = np.float128(f[37:])
+        print("R_file =", R_file, "E_file =", E_file)
 
     return alphas_betas_E
 
