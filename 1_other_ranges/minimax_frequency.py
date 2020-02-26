@@ -39,9 +39,13 @@ def main():
 
     alphas_betas_E = np.append(alphas_betas_init,1)
 
+    count_desired_ranges = 0
+
     while True:
 
- #      if desired_ranges_exist:
+       if desired_ranges_exist:
+          R_minimax = lines[count_desired_ranges]
+          count_desired_ranges += 1
 
 
        E_old = alphas_betas_E[-1]*2
