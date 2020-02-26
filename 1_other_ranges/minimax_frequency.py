@@ -4,6 +4,7 @@ from matplotlib import patches
 from scipy.optimize import curve_fit, root, fsolve
 from scipy.signal import argrelextrema
 from numpy import dot, outer
+import os.path
 
 def main():
     
@@ -19,8 +20,12 @@ def main():
     R_mult = 1.01
     R_fac_decrease = 1.2
 
-#    alphas_betas_init = np.loadtxt("../alpha_beta_of_N_"+str(n_minimax),dtype=np.float128)
-    alphas_betas_init = np.loadtxt("alpha_beta_of_N_14_R_0000000000120_E_6.861E-10",dtype=np.float128)
+    alphas_betas_init = np.loadtxt("../alpha_beta_of_N_"+str(n_minimax),dtype=np.float128)
+#    alphas_betas_init = np.loadtxt("alpha_beta_of_N_14_R_0000000000120_E_6.861E-10",dtype=np.float128)
+
+    desired_ranges_exist = os.path.isfile("alpha_beta_of_N_"+str(n_minimax)+"/desired_ranges")
+
+    print("\nDesired ranges file exists:", desired_ranges_exist,"\n")
 
     ydata = np.zeros(n_x,dtype=np.float128)
 
