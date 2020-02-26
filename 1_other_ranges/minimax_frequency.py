@@ -15,8 +15,9 @@ def main():
 
     R_increase_method = 'multiply'
 #    R_increase_method = 'add'
-    R_add = 1
+    R_add = 100
     R_mult = 1.01
+    R_fac_decrease = 1.2
 
     alphas_betas_init = np.loadtxt("../alpha_beta_of_N_"+str(n_minimax),dtype=np.float128)
 #    alphas_betas_init = np.loadtxt("alpha_beta_of_N_14_R_0000000000146_E_4.325E-10",dtype=np.float128)
@@ -54,13 +55,6 @@ def main():
            i += 1
            print("iteration =", i, "E =",  alphas_betas_E[-1], "Range =", R_minimax)
 
-           fig1, (axis1) = pl.subplots(1,1)
-           axis1.set_xlim((0.8,R_minimax))
-           axis1.semilogx(xdata,eta_plotting(xdata,alphas_betas_E))
-           axis1.semilogx([0.8,R_minimax], [alphas_betas_E[-1],alphas_betas_E[-1]])
-           axis1.semilogx([0.8,R_minimax], [-alphas_betas_E[-1],-alphas_betas_E[-1]])
-           pl.show()
-
            alphas_betas_E = my_fsolve(extrema_x, alphas_betas_E)
 
            break_i = False
@@ -85,7 +79,7 @@ def main():
        if(break_i):
            R_minimax += R_add
        else:
-           R_minimax = int(R_minimax/1.5)
+           R_minimax = int(R_minimax/R_fac_decrease)
 
 def build_denominator_matrix(xdata,alphas):
     matrix = []
@@ -119,7 +113,7 @@ def my_fsolve(extrema_x, alphas_betas_E):
 
     delta = gauss(mat_J)
 
-    return alphas_betas_E + delta
+    return alphas_betas_E - delta
 
 def gauss(A):
     n = len(A)
