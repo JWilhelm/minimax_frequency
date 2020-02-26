@@ -9,18 +9,18 @@ def main():
     
     # Set parameters
     n_minimax = 14                     # Number of minimax points
-    R_minimax = int(1E7)              # Range of the minimax approximation
+    R_minimax = int(120)              # Range of the minimax approximation
     n_x       = 12000                   # total number of points on the x-axis for optimization
     eps_diff  = 10**(-10)
 
-    R_increase_method = 'multiply'
-#    R_increase_method = 'add'
-    R_add = 100
+#    R_increase_method = 'multiply'
+    R_increase_method = 'add'
+    R_add = 1
     R_mult = 1.01
     R_fac_decrease = 1.2
 
-    alphas_betas_init = np.loadtxt("../alpha_beta_of_N_"+str(n_minimax),dtype=np.float128)
-#    alphas_betas_init = np.loadtxt("alpha_beta_of_N_14_R_0000000000146_E_4.325E-10",dtype=np.float128)
+#    alphas_betas_init = np.loadtxt("../alpha_beta_of_N_"+str(n_minimax),dtype=np.float128)
+    alphas_betas_init = np.loadtxt("alpha_beta_of_N_14_R_0000000000120_E_6.861E-10",dtype=np.float128)
 
     ydata = np.zeros(n_x,dtype=np.float128)
 
@@ -46,6 +46,7 @@ def main():
               extrema_x = np.append(extrema_x, xdata[argrelextrema(eta_plotting(xdata,alphas_betas_E[0:np.size(alphas_betas_E)-1]), np.less)[0]])
               num_extrema = np.size(extrema_x)
               if(num_extrema < 2*n_minimax+1):
+                  alphas_betas_E = converged_alphas_betas_E
                   if(R_increase_method == 'multiply'):
                       R_minimax = int(R_minimax*R_mult)
                   elif(R_increase_method == 'add'):
@@ -61,7 +62,9 @@ def main():
            if(i>500): 
                break_i = True
                break
-   
+  
+       converged_alphas_betas_E = alphas_betas_E
+
        sort_indices = np.argsort(alphas_betas_E[0:n_minimax])
        num_zeros = 13-len(str(R_minimax))
    
