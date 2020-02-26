@@ -4,7 +4,8 @@ from matplotlib import patches
 from scipy.optimize import curve_fit, root, fsolve
 from scipy.signal import argrelextrema
 from numpy import dot, outer
-import os.path
+from os import listdir
+from os.path import isfile, join
 
 def main():
     
@@ -20,12 +21,14 @@ def main():
     R_mult = 1.01
     R_fac_decrease = 1.2
 
-    desired_ranges_file = "alpha_beta_of_N_"+str(n_minimax)+"/desired_ranges"
+    path = "alpha_beta_of_N_"+str(n_minimax)
+
+    desired_ranges_file = path+"/desired_ranges"
 
     alphas_betas_init = np.loadtxt("../alpha_beta_of_N_"+str(n_minimax),dtype=np.float128)
 #    alphas_betas_init = np.loadtxt("alpha_beta_of_N_14_R_0000000000120_E_6.861E-10",dtype=np.float128)
 
-    desired_ranges_exist = os.path.isfile(desired_ranges_file)
+    desired_ranges_exist = isfile(desired_ranges_file)
 
     print("\nDesired ranges file exists:", desired_ranges_exist,"\n")
 
@@ -46,7 +49,7 @@ def main():
        if desired_ranges_exist:
           R_minimax = lines[count_desired_ranges]
           count_desired_ranges += 1
-
+          alphas_betas_E = find_closest_R(n_minimax, R_minimax, path)
 
        E_old = alphas_betas_E[-1]*2
    
@@ -103,6 +106,16 @@ def main():
            R_minimax += R_add
        else:
            R_minimax = int(R_minimax/R_fac_decrease)
+
+
+def find_closest_R(n_minimax, R_minimax, path):
+
+    files = [f for f in listdir(path) if isfile(join(path, f))]
+
+    print("files=", files)
+
+    return alphas_betas_E
+
 
 def build_denominator_matrix(xdata,alphas):
     matrix = []
