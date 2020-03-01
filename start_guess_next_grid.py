@@ -8,7 +8,7 @@ from numpy import dot, outer
 def main():
     
     # Set parameters
-    n_minimax = 38                     # Number of minimax points
+    n_minimax = 36                     # Number of minimax points
 
     n_previous = (n_minimax-10)//2
 
@@ -146,7 +146,7 @@ def main():
 
     alphas_betas_extrapol.append(min_beta_extra_factor*min_beta[n_previous-1])
     for i_beta in range(1,n_minimax):
-      alphas_betas_extrapol.append(alphas_betas_extrapol[i_beta-1]*betas_fac_extrapol[i_beta-1])
+      alphas_betas_extrapol.append(alphas_betas_extrapol[-1]*betas_fac_extrapol[i_beta-1])
 
     print("")
     print("")
